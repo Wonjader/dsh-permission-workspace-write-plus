@@ -89,7 +89,7 @@ dshmarket 热挂载。fs/shell 两行仍在 profile patch 中。
 > 禁用插件时 `disabled` 行与 `insert` 行必须成对处理，否则核心
 > fs/pwsh 或 fs/bash 服务缺失会导致 DSH 无法启动。
 
-### 从 GitHub 安装（待仓库就绪后）
+### 从 GitHub 安装
 
 ```sh
 dsh plugin --profile web add github:Wonjader/dsh-permission-workspace-write-plus
@@ -136,12 +136,6 @@ turn 开始 hold、turn 结束 release；多会话并发时引用计数，最后
 结束后释放；插件卸载/停用时自动释放。
 
 **特别说明**：当Windows的**Modern Standby**被触发时，**WSL会被暂停**，sleep guard功能无法避免这一机制。
-
-
-github.com/Wonjader/dsh-permission-workspace-write-plus
-
-
-
 
 ## 贡献
 
