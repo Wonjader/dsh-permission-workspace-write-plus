@@ -137,77 +137,11 @@ turn 开始 hold、turn 结束 release；多会话并发时引用计数，最后
 
 **特别说明**：当Windows的**Modern Standby**被触发时，**WSL会被暂停**，sleep guard功能无法避免这一机制。
 
-## 开源收录
 
-本插件已按开源发布准备。目标仓库：
+github.com/Wonjader/dsh-permission-workspace-write-plus
 
-- GitHub：<https://github.com/Wonjader/dsh-permission-workspace-write-plus>
-- 建议 npm 包名：`dsh-permission-workspace-write-plus`
-- 许可证：APL v1.0（见 [LICENSE.md](./LICENSE.md)）
 
-### 需要你在 GitHub 手动完成的步骤
 
-1. **创建仓库**
-   - 在 <https://github.com/new> 创建空仓库：
-     - Repository name：`dsh-permission-workspace-write-plus`
-     - Owner：`Wonjader`
-     - 可见性：Public
-     - 不要勾选 “Add a README” / “Add .gitignore” / “Choose a license”（保持空仓库）
-
-2. **推送代码**
-   - 把本插件目录内容推送到该仓库：
-     ```sh
-     git init
-     git add .
-     git commit -m "chore: release dsh-permission-workspace-write-plus 1.0.0"
-     git branch -M main
-     git remote add origin https://github.com/Wonjader/dsh-permission-workspace-write-plus.git
-     git push -u origin main
-     ```
-
-3. **设置仓库 Topics**
-   - 打开仓库页 → 右上角 Settings → 左侧 General → Topics
-   - 添加：
-     - `dsh-plugin`
-     - `dsh`
-     - `deepseek`
-     - `permission`
-     - `workspace`
-     - `write-plus`
-     - `sleep-guard`
-
-4. **创建 Release / Tag**
-   - 在 GitHub 仓库页面 → Releases → Create a new release
-   - Tag：`v1.0.0`
-   - Title：`1.0.0`
-   - 可写一段简短说明，附上本 README 的功能列表。
-
-5. **（可选）发布到 npm**
-   - 如果以后要发布 npm 包，先确保 package.json 中的 `peerDependencies` 已使用 `*` 或实际可解析版本；
-   - 然后：
-     ```sh
-     npm publish --access public
-     ```
-   - 发布前请确认包名 `dsh-permission-workspace-write-plus` 未被占用。
-
-6. **向 awesome-dsh-plugin 提交收录 PR**
-   - 仓库：<https://github.com/awesome-dsh-plugin/awesome-dsh-plugin>
-   - 在 `plugins.json` 或对应 registry 文件新增一条：
-     ```json
-     {
-       "name": "dsh-permission-workspace-write-plus",
-       "url": "https://github.com/Wonjader/dsh-permission-workspace-write-plus",
-       "description": "DSH Workspace Write Plus preset: workspace read/write + config/profile/skills writes + sleep guard.",
-       "keywords": ["dsh-plugin", "dsh", "permission", "workspace", "write-plus", "sleep-guard"]
-     }
-     ```
-   - 提交 PR，并在 PR 描述中注明仓库已添加 `dsh-plugin` topic。
-
-### dshmarket 收录后的安装
-
-```sh
-dsh plugin --profile web add github:Wonjader/dsh-permission-workspace-write-plus
-```
 
 ## 贡献
 
