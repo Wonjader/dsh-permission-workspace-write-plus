@@ -5,7 +5,7 @@
 ## 项目简介
 
 完全插件化的 **Workspace Write Plus** 权限预设 + 合并版跨平台睡眠守护。
-当前版本 **1.0.0**。
+当前版本 **1.1.0**。
 
 - 工作区读写 + 工作区外配置类文件写入
 - `.dsh/profiles` 插件/配置写入 + `.dsh/skills` 写入
@@ -136,6 +136,30 @@ turn 开始 hold、turn 结束 release；多会话并发时引用计数，最后
 结束后释放；插件卸载/停用时自动释放。
 
 **特别说明**：当Windows的**Modern Standby**被触发时，**WSL会被暂停**，sleep guard功能无法避免这一机制。
+
+## 升级记录（Changelog）
+
+### 1.1.0
+- 兼容新版 DSH：`@deepseek-ai/dsh-settings` 已移除 `installSettingsSection` / `settingsNamespace` 命名导出。插件改为运行时特性检测：旧版使用 `installSettingsSection(...)`，新版使用 `ctx.settings.installSection(...)`，避免 ESM 静态链接失败导致 DSH 无法启动。
+- Windows profile 的 `dshmarket` 升级到 `1.45.1`，以兼容新版 settings 服务 API。
+
+### 1.0.0
+- 首个正式版本：Workspace Write Plus 权限预设、`.dsh/profiles` / `.dsh/skills` 写入、系统睡眠/关机命令宿主执行、跨平台睡眠守护（Windows/Linux/macOS/WSL）。
+- 权限图标统一为原生 workspace-write 风格 + 右上角 “+”。
+- 设置页独立一栏。
+
+## 开源收录
+
+本插件目标仓库：
+
+- GitHub：<https://github.com/Wonjader/dsh-permission-workspace-write-plus>
+- 许可证：APL v1.0（见 [LICENSE.md](./LICENSE.md)）
+
+### dshmarket 收录后的安装
+
+```sh
+dsh plugin --profile web add github:Wonjader/dsh-permission-workspace-write-plus
+```
 
 ## 贡献
 
