@@ -139,12 +139,17 @@ turn 开始 hold、turn 结束 release；多会话并发时引用计数，最后
 
 ## 升级记录（Changelog）
 
+### 1.1.1
+
+- 修复新版 DSH Client 设置传输兼容：新版浏览器端将设置读写从 `connection.api.settings` 迁移到 `ctx.settingsScope` 服务；插件优先使用 `ctx.settingsScope.bind({ namespace })`，旧版回退到 `connection.api.settings`，修复新版下设置页缺少 **Workspace Write Plus** 一栏的问题。
+
 ### 1.1.0
+
 - 兼容新版 DSH Host 设置 API：`@deepseek-ai/dsh-settings` 已移除 `installSettingsSection` / `settingsNamespace` 命名导出。插件改为运行时特性检测：旧版使用 `installSettingsSection(...)`，新版使用 `ctx.settings.installSection(...)`，避免 ESM 静态链接失败导致 DSH 无法启动。
-- 兼容新版 DSH Client 设置 API：新版浏览器端把设置传输从 `connection.api.settings` 改为 `settingsScope` 服务；插件优先使用 `ctx.settingsScope.bind({ namespace })`，旧版仍回退到 `connection.api.settings`。修复新版下设置页缺少 **Workspace Write Plus** 一栏的问题。
 - Windows profile 的 `dshmarket` 升级到 `1.45.1`，以兼容新版 settings 服务 API。
 
 ### 1.0.0
+
 - 首个正式版本：Workspace Write Plus 权限预设、`.dsh/profiles` / `.dsh/skills` 写入、系统睡眠/关机命令宿主执行、跨平台睡眠守护（Windows/Linux/macOS/WSL）。
 - 权限图标统一为原生 workspace-write 风格 + 右上角 “+”。
 - 设置页独立一栏。
