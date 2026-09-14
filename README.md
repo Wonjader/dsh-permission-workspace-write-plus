@@ -5,7 +5,7 @@
 ## 项目简介
 
 完全插件化的 **Workspace Write Plus** 权限预设 + 合并版跨平台睡眠守护。
-当前版本 **1.1.1**。
+当前版本 **1.2.0**。
 
 - 工作区读写 + 工作区外配置类文件写入
 - `.dsh/profiles` 插件/配置写入 + `.dsh/skills` 写入
@@ -138,6 +138,13 @@ turn 开始 hold、turn 结束 release；多会话并发时引用计数，最后
 **特别说明**：当Windows的**Modern Standby**被触发时，**WSL会被暂停**，sleep guard功能无法避免这一机制。
 
 ## 升级记录（Changelog）
+### 1.2.0
+
+- 新增 `allowWriteDirs` 设置：可在 **Workspace Write Plus** 设置页中添加任意数量的绝对目录，这些目录会加入额外可写白名单，不再局限于预设的配置目录、`.dsh/profiles`、`.dsh/skills`、`.dsh` 主目录。
+- 设置页新增“额外可写目录”编辑器：支持添加、编辑、移除目录，保存后立即通过 settings API 生效。
+- 目录白名单为空时行为与旧版完全一致；主开关 `enabled` 关闭时所有自定义目录同样失效。
+- README 同步补充该功能与版本记录。
+
 
 ### 1.1.1
 

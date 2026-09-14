@@ -1,6 +1,6 @@
 {
   "name": "dsh-permission-workspace-write-plus",
-  "version": "1.1.1",
+  "version": "1.2.0",
   "private": false,
   "description": "DSH fully-pluggable Workspace Write Plus preset: workspace read/write + config-type files outside the workspace (no same-named workspace counterpart) + .dsh/profiles plugin writes + .dsh/skills writes + OS sleep/shutdown commands + full tool calls + merged cross-platform sleep guard (Windows/Linux/macOS/WSL to Windows host). Everything else outside the workspace stays write-denied. Zero core changes; hot-pluggable via profile patch HMR.",
   "type": "module",
