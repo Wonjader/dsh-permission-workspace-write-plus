@@ -5,7 +5,7 @@
 ## 项目简介
 
 完全插件化的 **Workspace Write Plus** 权限预设 + 合并版跨平台睡眠守护。
-当前版本 **1.2.0**。
+当前版本 **1.2.1**。
 
 - 工作区读写 + 工作区外配置类文件写入
 - `.dsh/profiles` 插件/配置写入 + `.dsh/skills` 写入
@@ -138,6 +138,11 @@ turn 开始 hold、turn 结束 release；多会话并发时引用计数，最后
 **特别说明**：当Windows的**Modern Standby**被触发时，**WSL会被暂停**，sleep guard功能无法避免这一机制。
 
 ## 升级记录（Changelog）
+### 1.2.1
+
+- 修复通用设置权限下拉列表中的图标：该菜单是 portal 渲染到 `document.body` 的，之前只判断了 `[role="dialog"]` 祖先，导致 Workspace Write Plus 仍被注入图标。现在同时识别 portal 菜单并跳过，保持与系统自带权限项一致。
+- 其他位置（对话区权限触发按钮、对话区权限下拉、设置侧栏）的 Workspace Write Plus 图标保持不变。
+
 ### 1.2.0
 
 - 新增 `allowWriteDirs` 设置：可在 **Workspace Write Plus** 设置页中添加任意数量的绝对目录，这些目录会加入额外可写白名单，不再局限于预设的配置目录、`.dsh/profiles`、`.dsh/skills`、`.dsh` 主目录。
