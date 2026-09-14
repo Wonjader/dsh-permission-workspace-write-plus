@@ -5,7 +5,7 @@
 ## 项目简介
 
 完全插件化的 **Workspace Write Plus** 权限预设 + 合并版跨平台睡眠守护。
-当前版本 **1.2.1**。
+当前版本 **1.2.2**。
 
 - 工作区读写 + 工作区外配置类文件写入
 - `.dsh/profiles` 插件/配置写入 + `.dsh/skills` 写入
@@ -42,7 +42,8 @@
   `SetThreadExecutionState`，Linux 用 `systemd-inhibit`，macOS 用
   `caffeinate`。WSL 中额外通过 interop 启动 Windows PowerShell 常驻进程，
   让 **Windows 主机**在 WSL 的 dsh 执行任务时同样不睡眠。
-- **Client 端**（`lib/client.js`）：权限图标 + 设置中独立的
+- **Client 端**（`lib/client.js`）：权限图标 + 权限中文名
+  （“工作区内修改+”）+ 设置中独立的
   **Workspace Write Plus** 设置栏（与通用设置同级）。
 
 ## 安装与启用
@@ -138,6 +139,14 @@ turn 开始 hold、turn 结束 release；多会话并发时引用计数，最后
 **特别说明**：当Windows的**Modern Standby**被触发时，**WSL会被暂停**，sleep guard功能无法避免这一机制。
 
 ## 升级记录（Changelog）
+### 1.2.2
+
+- 新增中文显示名：中文界面下权限名显示为 **“工作区内修改+”**（对应官方 Workspace Write 的“工作区内修改”）；英文界面与英文文案完全不变，仍为 **Workspace Write Plus**。
+- 适配范围：对话区权限触发按钮（含无障碍名称 `aria-label`）、对话区权限下拉、通用设置权限下拉、`/permission` 快捷选择列表，以及设置侧栏的插件分栏标题与总开关文案。
+- 切换界面语言后即时刷新；插件被禁用/卸载时恢复核心渲染的英文名。
+- 权限预设的 `name`（profile patch）与图标逻辑均不变：通用设置权限下拉仍保持无图标，其他位置图标不动。
+- 实现方式：client 端只在已渲染的文本与 `aria-label` 上就地改写，不改核心、零核心改动，也不干扰 React 的渲染状态。
+
 ### 1.2.1
 
 - 修复通用设置权限下拉列表中的图标：该菜单是 portal 渲染到 `document.body` 的，之前只判断了 `[role="dialog"]` 祖先，导致 Workspace Write Plus 仍被注入图标。现在同时识别 portal 菜单并跳过，保持与系统自带权限项一致。
