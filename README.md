@@ -5,7 +5,7 @@
 ## 项目简介
 
 完全插件化的 **Workspace Write Plus** 权限预设 + 合并版跨平台睡眠守护。
-当前版本 **1.3.1**。
+当前版本 **1.3.2**。
 
 - 工作区读写 + 工作区外配置类文件写入
 - `.dsh/profiles` 插件/配置写入 + `.dsh/skills` 写入
@@ -193,6 +193,17 @@ turn 开始 hold、turn 结束 release；多会话并发时引用计数，最后
 **特别说明**：当Windows的**Modern Standby**被触发时，**WSL会被暂停**，sleep guard功能无法避免这一机制。
 
 ## 升级记录（Changelog）
+### 1.3.2
+
+- **给新版客户端补上真正的设置页**：新版的插件设置页**不是自动生成**的 —— 平台把配置区完全交给插件页的
+  `plugins.row.config` 键控插槽（键为 `<包名>#<行 id>`），**注册这个键才会让插件页里那一行出现「配置」入口**。
+  1.3.1 只导出了 `Config`，所以打开插件页只能看到条目本身、看不到任何开关。
+- 现在注册键 `dsh-permission-workspace-write-plus#dsh-permission-workspace-write-plus`，页面直接复用原有的开关行
+  （7 个开关 + “额外可写目录”编辑器），数据层换成新版 `configForms` 表单（`load` / `setField`），
+  改动即时写入（与旧版设置栏一致的交互）。
+- 与官方设置页同样的守卫：host 未提供该条目命名空间时不注册（`configForms.whileServed`）。
+- 旧客户端的独立设置栏、以及 web 版行为完全不变。
+
 ### 1.3.1
 
 - **修复新版 DSH 上「设置里没有本插件」**：新版 host 的 `dsh-settings` 移除了
