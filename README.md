@@ -5,7 +5,7 @@
 ## 项目简介
 
 完全插件化的 **Workspace Write Plus** 权限预设 + 合并版跨平台睡眠守护。
-当前版本 **1.3.0**。
+当前版本 **1.3.1**。
 
 - 工作区读写 + 工作区外配置类文件写入
 - `.dsh/profiles` 插件/配置写入 + `.dsh/skills` 写入
@@ -193,6 +193,23 @@ turn 开始 hold、turn 结束 release；多会话并发时引用计数，最后
 **特别说明**：当Windows的**Modern Standby**被触发时，**WSL会被暂停**，sleep guard功能无法避免这一机制。
 
 ## 升级记录（Changelog）
+### 1.3.1
+
+- **修复新版 DSH 上「设置里没有本插件」**：新版 host 的 `dsh-settings` 移除了
+  `installSettingsSection` / `installSection`，设置模型改成「profile 条目 id →
+  该条目的 `Config` schema，自动生成页面」（`describe()` 里 `ns = entry.options.id`）。
+  1.2.x 的注册分支在新宿主上会直接抛错，整条链断掉，所以设置项从未出现。
+- 现在把开关 schema 作为包根的 **`Config`** 导出，并用 schemastery 的
+  `.volatile()` 标记每个字段 —— 新版 host 的 `volatileForm()` 只收
+  `meta.volatile` 的字段，不标就不会进表单。旧 schemastery 没有 `.volatile()`，
+  调用点做了守卫（跳过），因此**旧宿主不受影响**。
+- 包根 `apply()` 现在会从自身条目配置发布生效开关（新版宿主下设置页的每次修改
+  都会重跑 `apply`），fs/shell 后端通过 `currentSwitches()` 立即取到新值。
+- 旧宿主仍走原来的 `workspace-write-plus` 独立设置栏，web/旧客户端行为不变。
+
+- **设置页在哪**：旧版客户端在「设置 → Workspace Write Plus / 工作区内修改+」；
+  新版客户端在「插件」页里对应条目 `dsh-permission-workspace-write-plus` 的配置表单。
+
 ### 1.3.0
 
 - **适配 DSH 桌面版与新版权限界面**：新版客户端把权限选择器整体并入
