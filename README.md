@@ -5,7 +5,7 @@
 ## 项目简介
 
 完全插件化的 **Workspace Write Plus** 权限预设 + 合并版跨平台睡眠守护。
-当前版本 **1.3.2**。
+当前版本 **1.4.0**。
 
 - 工作区读写 + 工作区外配置类文件写入
 - `.dsh/profiles` 插件/配置写入 + `.dsh/skills` 写入
@@ -193,6 +193,22 @@ turn 开始 hold、turn 结束 release；多会话并发时引用计数，最后
 **特别说明**：当Windows的**Modern Standby**被触发时，**WSL会被暂停**，sleep guard功能无法避免这一机制。
 
 ## 升级记录（Changelog）
+### 1.4.0
+
+- **适配最新版 DSH（0.2.1-alpha.2 一代）的两处破坏性变更**：
+  1. **会话事件读取**：最新版 `Session` 移除了公开的 `events` 数组（只剩
+     `eventAt()` / `snapshotEvents()` / `ownEvents()`）。插件原本靠
+     `session.events` 找 `permission/preset`，于是**每个会话都被判成「非 plus」**，
+     所有附加放行静默失效 —— 表现就是「插件装了但没用」。现在按
+     `snapshotEvents()` → `ownEvents()` → 旧版 `events` 依次回退读取，并以
+     `session.seq` 做每会话缓存（写路径每次都会问它）。
+  2. **执行器契约**：最新版 `ShellExecutor` 只声明 `resolve()` 与 `execute(spec)`
+     （`run` / `start` 已移除）。插件的 shell 后端原本覆盖 `run` / `start`，
+     在最新版上**从未被调用**，等于完全没有围栏。现在按最新版
+     `SandboxPwshExecutor` 的结构覆盖 `execute(spec)`（`executeArgv` +
+     `decorateResult` + `onProcessDone`），并保留旧版 `run` / `start` 路径兼容旧宿主。
+- 其余能力与 1.3.2 一致。
+
 ### 1.3.2
 
 - **给新版客户端补上真正的设置页**：新版的插件设置页**不是自动生成**的 —— 平台把配置区完全交给插件页的
