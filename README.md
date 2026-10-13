@@ -5,7 +5,7 @@
 ## 项目简介
 
 完全插件化的 **Workspace Write Plus** 权限预设 + 合并版跨平台睡眠守护。
-当前版本 **1.2.2**。
+当前版本 **1.3.0**。
 
 - 工作区读写 + 工作区外配置类文件写入
 - `.dsh/profiles` 插件/配置写入 + `.dsh/skills` 写入
@@ -44,7 +44,9 @@
   让 **Windows 主机**在 WSL 的 dsh 执行任务时同样不睡眠。
 - **Client 端**（`lib/client.js`）：权限图标 + 权限中文名
   （“工作区内修改+”）+ 设置中独立的
-  **Workspace Write Plus** 设置栏（与通用设置同级）。
+  **Workspace Write Plus** 设置栏（与通用设置同级），同时适配旧版
+  （`ui-conversation` 内联下拉）与新版（权限 UI 合并进
+  `ui-permission-presets`、下拉 portal 渲染）客户端。
 
 ## 安装与启用
 
@@ -79,6 +81,43 @@ dshmarket 热挂载。fs/shell 两行仍在 profile patch 中。
       name: dsh-permission-workspace-write-plus/shell
 ```
 
+### 权限预设（所有平台都要）
+
+profile patch 的 `permission` 行**必须**包含本预设，否则预设不存在、
+`defaultPreset: workspace-write-plus` 会让 `permission` 行启动即报错
+（新版 DSH 会直接抛 `unknown preset "workspace-write-plus"`）：
+
+```yaml
+- id: permission
+  config:
+    presets:
+      read-only:
+        sandbox: read-only
+        approval: ask
+      workspace-write:
+        sandbox: workspace-write
+        approval: ask
+      workspace-write-plus:
+        sandbox: workspace-write
+        approval: ask
+        name: Workspace Write Plus
+        description: >-
+          Full tool calls; workspace read/write; config-type files outside the
+          workspace with no same-named counterpart inside it; .dsh/profiles
+          plugin writes; .dsh/skills writes; OS sleep/shutdown commands; sleep
+          guard keeps the host awake during agent turns; everything else outside
+          the workspace stays write-denied; wider retries require approval.
+      danger-full-access:
+        sandbox: danger-full-access
+        approval: never
+    defaultPreset: workspace-write-plus
+```
+
+> **为什么不能自动完成**：loader patch 是**整体替换** `config`（不是深合并），
+> 而 profile 的 `cordis.patch.yml` 在**所有 bundle 之后**才应用。所以只要
+> profile 自己配了 `permission`，bundle 里补的预设就会被覆盖掉，必须以
+> profile patch 为准。1.3.0 起插件会在启动时自检并打印上面这段提示。
+
 包根行由插件 `dsh.bundle.patch` 提供：
 
 ```yaml
@@ -89,6 +128,21 @@ dshmarket 热挂载。fs/shell 两行仍在 profile patch 中。
 
 > 禁用插件时 `disabled` 行与 `insert` 行必须成对处理，否则核心
 > fs/pwsh 或 fs/bash 服务缺失会导致 DSH 无法启动。
+
+### DSH 桌面版（Electron）
+
+桌面版的插件管理器只会做两件事：把包装进
+`<DSH_HOME>/profiles/<profile>/node_modules`，并把包名加进
+`package.json` 的 `dsh.profile.bundles`。它**不会**改
+`profiles/<profile>/cordis.patch.yml`，所以装完还要按上面的 Windows
+profile patch + 权限预设各补一段，插件才真正生效。
+
+桌面版 profile 默认 `patchReload: live`，所以**改完 `cordis.patch.yml` 存盘
+即可热生效**（不需要重启桌面版）；只有改动插件 host 侧代码或插件来源时才需要
+重启。
+
+自检：启动日志里若出现 `the "workspace-write-plus" preset is not in the
+running permission table`，说明 profile patch 还没配好，按日志给出的片段补齐。
 
 ### 从 GitHub 安装
 
@@ -139,6 +193,19 @@ turn 开始 hold、turn 结束 release；多会话并发时引用计数，最后
 **特别说明**：当Windows的**Modern Standby**被触发时，**WSL会被暂停**，sleep guard功能无法避免这一机制。
 
 ## 升级记录（Changelog）
+### 1.3.0
+
+- **适配 DSH 桌面版与新版权限界面**：新版客户端把权限选择器整体并入
+  `ui-permission-presets`，并把对话区权限下拉也改成了 portal 渲染。图标规则
+  因此改为「portal 菜单 + 设置弹窗打开 ⇒ 属于设置行，保持无图标」，对话区下拉
+  恢复注入 “+” 图标（旧版客户端行为不变）。中文名改写逻辑本身与版本无关，继续生效。
+- **新增启动自检**：插件挂载后若运行中的权限表里没有 `workspace-write-plus`
+  （典型场景：桌面版只装 bundle、profile patch 没配），会在日志里打印完整的
+  profile patch 片段，而不是静默无效。
+- **README 补充桌面版安装要点**：为什么权限预设无法由 bundle 自动补上
+  （loader patch 整体替换 `config`，且 profile 层最后应用）。
+- 版本号升至 1.3.0；权限能力与 1.2.2 完全一致。
+
 ### 1.2.2
 
 - 新增中文显示名：中文界面下权限名显示为 **“工作区内修改+”**（对应官方 Workspace Write 的“工作区内修改”）；英文界面与英文文案完全不变，仍为 **Workspace Write Plus**。
