@@ -193,6 +193,24 @@ turn 开始 hold、turn 结束 release；多会话并发时引用计数，最后
 **特别说明**：当Windows的**Modern Standby**被触发时，**WSL会被暂停**，sleep guard功能无法避免这一机制。
 
 ## 升级记录（Changelog）
+### 1.4.1
+
+- **修复最新本地建构版（0.2.x 一代）上「设置里没有本插件的页面」**：该版本把
+  `settingsScope` 服务整个删掉了（在它的 `ui-settings` 客户端 bundle 里出现 0 次），
+  插件设置的唯一传输变成 `configForms`（按 profile 条目 id 派生表单）。1.4.0 的独立设置栏
+  只在 `settingsScope` 存在时注册，因此在那一代宿主上**从来没有注册成功过**。
+  1. **独立设置页改由 `configForms` 表单驱动**：设置左侧导航重新出现「工作区内修改+」。
+  2. **插件页的四个面全部注册**：`plugins.item`、`plugins.bundle.config`、
+     `plugins.row.config`（键 `<包名>#<行 id>`）、`settings.plugins.tab`。
+     那一代宿主里插件设置页由**侧边栏「插件」页**（插件管理器）派发 `plugins.item` 渲染：
+     owner 参数 `{view:'summary'}` 出摘要、`{view:'page', form}` 出设置页 —— 摘要只画一句描述，
+     设置内容只在页面视图里画，避免同一个表单出现两次。
+  3. **去掉 `whileServed` 注册门槛**：它的实现是「命名空间已经出现在 host 的 describe 文档里，
+     回调才跑」，而页面本身就是触碰该命名空间的唯一入口，构成死锁。表单控制器改为懒建，
+     host 未供出表单时页面显示「不可用」，而不是整页消失。
+- 未声明的插槽不会触发（`slots.inject` 会等待声明），所以**旧宿主行为不变**：
+  0.1.5-rc.2 及更早没有 `configForms`，仍走 `settingsScope` / connection 旧路与原有独立设置栏。
+
 ### 1.4.0
 
 - **适配最新版 DSH（0.2.1-alpha.2 一代）的两处破坏性变更**：
